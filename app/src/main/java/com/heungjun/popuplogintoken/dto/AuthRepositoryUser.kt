@@ -3,12 +3,7 @@ package com.heungjun.popuplogintoken.dto
 import com.heungjun.popuplogintoken.model.ApiResponse
 import com.heungjun.popuplogintoken.model.Login
 
-data class TokenResponse(
-    val accessToken: String,
-    val refreshToken: String
-)
-
-interface AuthRepository {
+interface AuthRepositoryUser {
     suspend fun login(login: Login): ApiResponse
     suspend fun saveAccessToken(token: String)
     suspend fun saveRefreshToken(refreshToken: String)

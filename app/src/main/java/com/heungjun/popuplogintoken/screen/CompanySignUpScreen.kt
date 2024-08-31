@@ -15,17 +15,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.heungjun.popuplogintoken.viewmodel.LoginViewModel
+import com.heungjun.popuplogintoken.viewmodel.CompanySignUpViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = viewModel()) {
+fun CompanySignUpScreen(
+    viewModel: CompanySignUpViewModel = viewModel(),
+    onSignUpSuccess: () -> Unit
+) {
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
-    val token by viewModel.token.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val signUpSuccess by viewModel.signUpSuccess.collectAsState()
 
     Column(
         modifier = Modifier
@@ -47,22 +49,18 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel()) {
             visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { viewModel.login() }) {
-            Text("Login")
+        Button(onClick = { viewModel.signUp() }) {
+            Text("Sign Up")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        token?.let {
-            Text("Token: $it")
+
+        if (signUpSuccess) {
+            onSignUpSuccess()
         }
+
         errorMessage?.let {
             Text("Error: $it", color = androidx.compose.ui.graphics.Color.Red)
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen()
 }

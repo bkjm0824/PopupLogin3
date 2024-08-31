@@ -2,13 +2,13 @@ package com.heungjun.popuplogintoken.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heungjun.popuplogintoken.repo.NetworkRepository
+import com.heungjun.popuplogintoken.repo.NetworkRepositoryUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
-    private val repository: NetworkRepository = NetworkRepository()  // 가능하다면 DI를 사용하세요
+class UserSignUpViewModel(
+    private val repository: NetworkRepositoryUser = NetworkRepositoryUser()
 ) : ViewModel() {
 
     private val _email = MutableStateFlow("")
@@ -17,11 +17,11 @@ class LoginViewModel(
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
 
-    private val _token = MutableStateFlow<String?>(null)
-    val token: StateFlow<String?> = _token
-
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
+
+    private val _signUpSuccess = MutableStateFlow(false)
+    val signUpSuccess: StateFlow<Boolean> = _signUpSuccess
 
     fun onEmailChange(newEmail: String) {
         _email.value = newEmail
@@ -31,20 +31,19 @@ class LoginViewModel(
         _password.value = newPassword
     }
 
-    fun login() {
+    fun signUp() {
         viewModelScope.launch {
             try {
+                // 회원가입 API 호출 (여기서는 로그인을 대신 사용)
                 val response = repository.loginApi(_email.value, _password.value)
                 if (response.result) {
-                    _token.value = response.data.token
+                    _signUpSuccess.value = true
                     _errorMessage.value = null
                 } else {
-                    _token.value = null
                     _errorMessage.value = response.message
                 }
             } catch (e: Exception) {
-                _token.value = null
-                _errorMessage.value = "Login failed: ${e.message}"
+                _errorMessage.value = "Sign up failed: ${e.message}"
             }
         }
     }

@@ -13,7 +13,7 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-class NetworkRepository {
+class NetworkRepositoryUser {
 
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
@@ -22,7 +22,7 @@ class NetworkRepository {
     }
 
     suspend fun loginApi(email: String, password: String): ApiResponse {
-        val response: ApiResponse = client.post("http://10.0.2.2:8080/auth/company/login") {
+        val response: ApiResponse = client.post("http://10.0.2.2:8080/auth/user/login") {
             contentType(ContentType.Application.Json)
             setBody(Login(email, password))
         }.body()

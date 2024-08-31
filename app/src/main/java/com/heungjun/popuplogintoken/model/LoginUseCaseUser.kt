@@ -1,8 +1,8 @@
-package com.heungjun.popuplogintoken.dto
+package com.heungjun.popuplogintoken.model
 
-import com.heungjun.popuplogintoken.model.Login
+import com.heungjun.popuplogintoken.dto.AuthRepositoryUser
 
-class LoginUseCase(private val authRepository: AuthRepository) {
+class LoginUseCaseUser(private val authRepository: AuthRepositoryUser) {
 
     suspend fun login(id: String, password: String): Result<Unit> {
         return runCatching {
