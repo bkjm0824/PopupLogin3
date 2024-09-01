@@ -29,4 +29,33 @@ class NetworkRepositoryCompany {
 
         return response
     }
+
+    suspend fun signUpApi(
+        email: String,
+        password: String,
+        companyName: String,
+        companyId: String,
+        managerName: String,
+        address: String,
+        detailAddress: String,
+        postCode: String
+    ): ApiResponse {
+        val response: ApiResponse = client.post("http://10.0.2.2:8080/auth/company/signup") {
+            contentType(ContentType.Application.Json)
+            setBody(
+                mapOf(
+                    "email" to email,
+                    "password" to password,
+                    "companyName" to companyName,
+                    "companyId" to companyId,
+                    "managerName" to managerName,
+                    "address" to address,
+                    "detailAddress" to detailAddress,
+                    "postCode" to postCode
+                )
+            )
+        }.body()
+
+        return response
+    }
 }

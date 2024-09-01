@@ -95,4 +95,7 @@ dependencies {
 
     // Compose Navigation 라이브러리 (기본으로 설정된 것도 있지만 필요시 추가 가능)
     implementation("androidx.navigation:navigation-compose:2.5.3")
+
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.0")
 }
