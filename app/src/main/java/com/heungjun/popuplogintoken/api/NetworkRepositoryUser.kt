@@ -1,4 +1,4 @@
-package com.heungjun.popuplogintoken.repo
+package com.heungjun.popuplogintoken.api
 
 import com.heungjun.popuplogintoken.model.ApiResponse
 import com.heungjun.popuplogintoken.model.Login
@@ -21,22 +21,10 @@ class NetworkRepositoryUser {
         }
     }
 
-    suspend fun signUpApi(signUpData: Map<String, Any>): ApiResponse {
-        val response: ApiResponse = client.post("http://10.0.2.2:8080/auth/user/signup") {
-            contentType(ContentType.Application.Json)
-            setBody(signUpData)
-        }.body()
-
-        return response
-    }
-
-    // 기존 로그인 API 함수
     suspend fun loginApi(email: String, password: String): ApiResponse {
-        val response: ApiResponse = client.post("http://10.0.2.2:8080/auth/user/login") {
+        return client.post("http://10.0.2.2:8080/auth/user/login") {
             contentType(ContentType.Application.Json)
             setBody(Login(email, password))
         }.body()
-
-        return response
     }
 }

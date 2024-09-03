@@ -14,8 +14,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.heungjun.popuplogintoken.screen.navigation.NavItem
+import com.heungjun.popuplogintoken.navigation.NavItem
 
 @Composable
 fun Footer(
@@ -54,13 +53,4 @@ fun Footer(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FooterPreview() {
-    Footer(
-        selectedIndex = 2, // 예: "Home"이 선택된 상태로 설정
-        onItemSelected = {}
-    )
 }

@@ -2,7 +2,7 @@ package com.heungjun.popuplogintoken.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heungjun.popuplogintoken.repo.NetworkRepositoryUser
+import com.heungjun.popuplogintoken.api.NetworkRepositoryUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -22,10 +22,6 @@ class LoginViewModelUser(
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
-
-    // 로그인 성공 여부를 추적
-    private val _loginSuccess = MutableStateFlow(false)
-    val loginSuccess: StateFlow<Boolean> = _loginSuccess
 
     fun onEmailChange(newEmail: String) {
         _email.value = newEmail

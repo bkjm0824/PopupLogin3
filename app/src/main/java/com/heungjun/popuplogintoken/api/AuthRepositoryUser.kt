@@ -1,9 +1,9 @@
-package com.heungjun.popuplogintoken.dto
+package com.heungjun.popuplogintoken.api
 
 import com.heungjun.popuplogintoken.model.ApiResponse
 import com.heungjun.popuplogintoken.model.Login
 
-interface AuthRepositoryCompany {
+interface AuthRepositoryUser {
     suspend fun login(login: Login): ApiResponse
     suspend fun saveAccessToken(token: String)
     suspend fun saveRefreshToken(refreshToken: String)

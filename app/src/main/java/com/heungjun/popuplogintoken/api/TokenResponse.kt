@@ -1,4 +1,4 @@
-package com.heungjun.popuplogintoken.dto
+package com.heungjun.popuplogintoken.api
 
 data class TokenResponse(
     val accessToken: String,

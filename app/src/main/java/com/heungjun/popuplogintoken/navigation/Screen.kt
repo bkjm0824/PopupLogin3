@@ -1,4 +1,4 @@
-package com.heungjun.popuplogintoken.navigation.login
+package com.heungjun.popuplogintoken.navigation
 
 sealed class Screen(val route: String) {
     object GeneralMemberLogin : Screen("general_member_login")

@@ -1,4 +1,4 @@
-package com.heungjun.popuplogintoken.screen.navigation
+package com.heungjun.popuplogintoken.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
