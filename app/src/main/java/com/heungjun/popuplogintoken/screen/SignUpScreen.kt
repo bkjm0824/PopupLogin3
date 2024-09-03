@@ -22,6 +22,8 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,11 +38,29 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.heungjun.popuplogintoken.R
+import com.heungjun.popuplogintoken.model.SignUpUser
 import com.heungjun.popuplogintoken.navigation.Screen
+import com.heungjun.popuplogintoken.viewmodel.UserSignUpViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 @Composable
-fun GeneralMemberSignUpScreen(navController: NavHostController) {
-    val selectedButton = remember { mutableStateOf("일반전용") }
+fun GeneralMemberSignUpScreen(navController: NavHostController, viewModel: UserSignUpViewModel = viewModel()) {
+    val signUpUser = remember { mutableStateOf(
+        SignUpUser(
+            birth = "", categories = emptyList(), detailAddress = "", email = "",
+            gender = "", mapx = "", mapy = "", nickname = "", password = "",
+            phone = "", postcode = "", username = ""
+        )
+    ) }
+
+    val signUpSuccess by viewModel.signUpSuccess.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+
+    if (signUpSuccess) {
+        // Navigate to login screen or show a success message
+        navController.navigate(Screen.CorporateMemberLogin.route)
+    }
 
     Column(
         modifier = Modifier
@@ -49,10 +69,7 @@ fun GeneralMemberSignUpScreen(navController: NavHostController) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        CustomTopAppBar(navController = navController)
-//        Divider(color = Color.Gray, thickness = 1.dp)
-//        Spacer(modifier = Modifier.height(16.dp))
-        SelectMemberType(navController, selectedButton)
+        SelectMemberType(navController, selectedButton = remember { mutableStateOf("일반전용") })
         Spacer(modifier = Modifier.height(16.dp))
         Box(
             modifier = Modifier
@@ -68,9 +85,17 @@ fun GeneralMemberSignUpScreen(navController: NavHostController) {
             ) {
                 SignUpTitleSection()
                 GMSocialLoginSection()
-                GMInputFieldSection()
-                CategorySelectionScreen()
-                SignUpButton(onClick = { /* Handle sign up */ })
+                GMInputFieldSection(
+                    signUpUser = signUpUser.value,
+                    onSignUpUserChange = { updatedUser ->
+                        signUpUser.value = updatedUser
+                        viewModel.onSignUpUserChange(updatedUser)
+                    }
+                )
+                SignUpButton(onClick = { viewModel.signUp() })
+                if (errorMessage != null) {
+                    Text(text = errorMessage ?: "", color = Color.Red, fontSize = 14.sp)
+                }
                 Text(
                     text = "로그인으로 돌아가기",
                     color = Color.Blue,
@@ -161,28 +186,35 @@ fun GMSocialLoginSection() {
 }
 
 @Composable
-fun GMInputFieldSection() {
-    val password = remember { mutableStateOf("") }
+fun GMInputFieldSection(
+    signUpUser: SignUpUser,
+    onSignUpUserChange: (SignUpUser) -> Unit
+) {
+    val password = remember { mutableStateOf(signUpUser.password) }
     val confirmPassword = remember { mutableStateOf("") }
-    val name = remember { mutableStateOf("") }
-    val nickname = remember { mutableStateOf("") }
-    val birthdate = remember { mutableStateOf("") }
-    val phoneNumber = remember { mutableStateOf("") }
-    val isBirthdateValid = remember { mutableStateOf(true) }
     val isPasswordMatched = remember { mutableStateOf(true) }
-    val isMale = remember { mutableStateOf(true) }
-    val isFemale = remember { mutableStateOf(false) }
+    val isBirthdateValid = remember { mutableStateOf(true) }
+    val isMale = remember { mutableStateOf(signUpUser.gender == "남자") }
+    val isFemale = remember { mutableStateOf(signUpUser.gender == "여자") }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        CheckUserEmailScreen()
+        InputFieldWithUnderline(
+            label = "이메일:",
+            value = signUpUser.email,
+            onValueChange = {
+                onSignUpUserChange(signUpUser.copy(email = it))
+            },
+            placeholder = "이메일을 입력하세요"
+        )
         InputFieldWithUnderline(
             label = "비밀번호:",
             value = password.value,
             onValueChange = {
                 password.value = it
+                onSignUpUserChange(signUpUser.copy(password = it))
                 if (it.isNotEmpty() && confirmPassword.value.isNotEmpty()) {
                     isPasswordMatched.value = it == confirmPassword.value
                 }
@@ -209,16 +241,25 @@ fun GMInputFieldSection() {
         }
         InputFieldWithUnderline(
             label = "이름:",
-            value = name.value,
-            onValueChange = { name.value = it },
+            value = signUpUser.username,
+            onValueChange = {
+                onSignUpUserChange(signUpUser.copy(username = it))
+            },
             placeholder = "이름을 입력하세요"
         )
-        CheckNicknameScreen()
+        InputFieldWithUnderline(
+            label = "닉네임:",
+            value = signUpUser.nickname,
+            onValueChange = {
+                onSignUpUserChange(signUpUser.copy(nickname = it))
+            },
+            placeholder = "닉네임을 입력하세요"
+        )
         InputFieldWithUnderline(
             label = "생년월일 (YYYYMMDD):",
-            value = birthdate.value,
+            value = signUpUser.birth,
             onValueChange = {
-                birthdate.value = it
+                onSignUpUserChange(signUpUser.copy(birth = it))
                 isBirthdateValid.value = it.length == 8
             },
             placeholder = "생년월일을 입력하세요"
@@ -228,8 +269,10 @@ fun GMInputFieldSection() {
         }
         InputFieldWithUnderline(
             label = "전화번호:",
-            value = phoneNumber.value,
-            onValueChange = { phoneNumber.value = it },
+            value = signUpUser.phone,
+            onValueChange = {
+                onSignUpUserChange(signUpUser.copy(phone = it))
+            },
             placeholder = "전화번호를 입력하세요"
         )
         Row(
@@ -242,7 +285,10 @@ fun GMInputFieldSection() {
                     checked = isMale.value,
                     onCheckedChange = {
                         isMale.value = it
-                        if (it) isFemale.value = false
+                        if (it) {
+                            onSignUpUserChange(signUpUser.copy(gender = "남자"))
+                            isFemale.value = false
+                        }
                     },
                     colors = CheckboxDefaults.colors(checkmarkColor = Color.White)
                 )
@@ -253,7 +299,10 @@ fun GMInputFieldSection() {
                     checked = isFemale.value,
                     onCheckedChange = {
                         isFemale.value = it
-                        if (it) isMale.value = false
+                        if (it) {
+                            onSignUpUserChange(signUpUser.copy(gender = "여자"))
+                            isMale.value = false
+                        }
                     },
                     colors = CheckboxDefaults.colors(checkmarkColor = Color.White)
                 )
@@ -370,8 +419,8 @@ fun CMInputFieldSectionPreview() {
     CMInputFieldSection()
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GMInputFieldSectionPreview() {
-    GMInputFieldSection()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun GMInputFieldSectionPreview() {
+//    GMInputFieldSection()
+//}
