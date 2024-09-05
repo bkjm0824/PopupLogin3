@@ -42,6 +42,7 @@ import com.heungjun.popuplogintoken.model.SignUpUser
 import com.heungjun.popuplogintoken.navigation.Screen
 import com.heungjun.popuplogintoken.viewmodel.UserSignUpViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.heungjun.popuplogintoken.viewmodel.CompanySignUpViewModel
 
 
 @Composable
@@ -110,8 +111,20 @@ fun GeneralMemberSignUpScreen(navController: NavHostController, viewModel: UserS
 }
 
 @Composable
-fun CorporateMemberSignUpScreen(navController: NavHostController) {
-    val selectedButton = remember { mutableStateOf("기업전용") }
+fun CorporateMemberSignUpScreen(navController: NavHostController, viewModel: CompanySignUpViewModel = viewModel()) {
+    val companyName by viewModel.companyName.collectAsState()
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val managerName by viewModel.managerName.collectAsState()
+    val address by viewModel.address.collectAsState()
+
+    val signUpSuccess by viewModel.signUpSuccess.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+
+    if (signUpSuccess) {
+        // Navigate to login screen or show a success message
+        navController.navigate(Screen.CorporateMemberLogin.route)
+    }
 
     Column(
         modifier = Modifier
@@ -120,10 +133,7 @@ fun CorporateMemberSignUpScreen(navController: NavHostController) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        CustomTopAppBar(navController = navController)
-//        Divider(color = Color.Gray, thickness = 1.dp)
-//        Spacer(modifier = Modifier.height(16.dp))
-        SelectMemberType(navController, selectedButton)
+        SelectMemberType(navController, selectedButton = remember { mutableStateOf("기업전용") })
         Spacer(modifier = Modifier.height(16.dp))
         Box(
             modifier = Modifier
@@ -138,8 +148,22 @@ fun CorporateMemberSignUpScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 SignUpTitleSection()
-                CMInputFieldSection()
-                SignUpButton(onClick = { /* Handle sign up */ })
+                CMInputFieldSection(
+                    companyName = companyName,
+                    email = email,
+                    password = password,
+                    managerName = managerName,
+                    address = address,
+                    onCompanyNameChange = viewModel::onCompanyNameChange,
+                    onEmailChange = viewModel::onEmailChange,
+                    onPasswordChange = viewModel::onPasswordChange,
+                    onManagerNameChange = viewModel::onManagerNameChange,
+                    onAddressChange = viewModel::onAddressChange
+                )
+                SignUpButton(onClick = { viewModel.signUp() })
+                if (errorMessage != null) {
+                    Text(text = errorMessage ?: "", color = Color.Red, fontSize = 14.sp)
+                }
                 Text(
                     text = "로그인으로 돌아가기",
                     color = Color.Blue,
@@ -313,17 +337,18 @@ fun GMInputFieldSection(
 }
 
 @Composable
-fun CMInputFieldSection() {
-    val companyName = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val confirmPassword = remember { mutableStateOf("") }
-    val businessNumber = remember { mutableStateOf("") }
-    val representativeName = remember { mutableStateOf("") }
-    val zipCode = remember { mutableStateOf("") }
-    val preciseAddress = remember { mutableStateOf("") }
-    val detailAddress = remember { mutableStateOf("") }
-    val isPasswordMatched = remember { mutableStateOf(true) }
-
+fun CMInputFieldSection(
+    companyName: String,
+    email: String,
+    password: String,
+    managerName: String,
+    address: String,
+    onCompanyNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onManagerNameChange: (String) -> Unit,
+    onAddressChange: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -332,73 +357,36 @@ fun CMInputFieldSection() {
     ) {
         InputFieldWithUnderline(
             label = "기업명:",
-            value = companyName.value,
-            onValueChange = { companyName.value = it },
+            value = companyName,
+            onValueChange = onCompanyNameChange,
             placeholder = "기업명을 입력해주세요"
         )
-        CheckCompanyEmailScreen()
+        InputFieldWithUnderline(
+            label = "이메일:",
+            value = email,
+            onValueChange = onEmailChange,
+            placeholder = "이메일을 입력하세요"
+        )
         InputFieldWithUnderline(
             label = "비밀번호:",
-            value = password.value,
-            onValueChange = {
-                password.value = it
-                if (it.isNotEmpty() && confirmPassword.value.isNotEmpty()) {
-                    isPasswordMatched.value = it == confirmPassword.value
-                }
-            },
+            value = password,
+            onValueChange = onPasswordChange,
             placeholder = "비밀번호를 입력해주세요"
         )
         InputFieldWithUnderline(
-            label = "비밀번호 확인:",
-            value = confirmPassword.value,
-            onValueChange = {
-                confirmPassword.value = it
-                if (it.isNotEmpty() && password.value.isNotEmpty()) {
-                    isPasswordMatched.value = it == password.value
-                }
-            },
-            placeholder = "비밀번호를 한 번 더 입력해주세요"
-        )
-        if (password.value.isNotEmpty() && confirmPassword.value.isNotEmpty()) {
-            if (!isPasswordMatched.value) {
-                Text(
-                    text = "비밀번호가 일치하지 않습니다.",
-                    color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-            } else {
-                Text(
-                    text = "비밀번호가 일치합니다.",
-                    color = Color.Green,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-            }
-        }
-        CheckCompanyIdScreen()
-        InputFieldWithUnderline(
             label = "대표자명:",
-            value = representativeName.value,
-            onValueChange = { representativeName.value = it },
+            value = managerName,
+            onValueChange = onManagerNameChange,
             placeholder = "대표자명을 입력해주세요"
         )
-        CheckZipcodeScreen()
         InputFieldWithUnderline(
             label = "주소:",
-            value = preciseAddress.value,
-            onValueChange = { preciseAddress.value = it },
+            value = address,
+            onValueChange = onAddressChange,
             placeholder = "주소를 입력해주세요"
-        )
-        InputFieldWithUnderline(
-            label = "상세주소:",
-            value = detailAddress.value,
-            onValueChange = { detailAddress.value = it },
-            placeholder = "상세주소를 입력해주세요"
         )
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun CorporateMemberSignUpScreenPreview() {
@@ -413,11 +401,11 @@ fun GeneralMemberSignUpScreenPreview() {
     GeneralMemberSignUpScreen(navController = navController)
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CMInputFieldSectionPreview() {
-    CMInputFieldSection()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CMInputFieldSectionPreview() {
+//    CMInputFieldSection()
+//}
 
 //@Preview(showBackground = true)
 //@Composable

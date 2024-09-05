@@ -2,14 +2,16 @@ package com.heungjun.popuplogintoken.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.heungjun.popuplogintoken.api.NetworkRepositoryCompany
+import com.heungjun.popuplogintoken.api.SignUpCompRepo
+import com.heungjun.popuplogintoken.model.ComSignUP
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class CompanySignUpViewModel(
-    private val repository: NetworkRepositoryCompany = NetworkRepositoryCompany()
-) : ViewModel() {
+class CompanySignUpViewModel : ViewModel() {
+
+    private val _companyName = MutableStateFlow("")
+    val companyName: StateFlow<String> = _companyName
 
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email
@@ -17,14 +19,21 @@ class CompanySignUpViewModel(
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
 
-    private val _companyName = MutableStateFlow("")
-    val companyName: StateFlow<String> = _companyName
+    private val _managerName = MutableStateFlow("")
+    val managerName: StateFlow<String> = _managerName
+
+    private val _address = MutableStateFlow("")
+    val address: StateFlow<String> = _address
+
+    private val _signUpSuccess = MutableStateFlow(false)
+    val signUpSuccess: StateFlow<Boolean> = _signUpSuccess
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
-    private val _signUpSuccess = MutableStateFlow(false)
-    val signUpSuccess: StateFlow<Boolean> = _signUpSuccess
+    fun onCompanyNameChange(newCompanyName: String) {
+        _companyName.value = newCompanyName
+    }
 
     fun onEmailChange(newEmail: String) {
         _email.value = newEmail
@@ -34,19 +43,33 @@ class CompanySignUpViewModel(
         _password.value = newPassword
     }
 
-    fun onCompanyNameChange(newCompanyName: String) {
-        _companyName.value = newCompanyName
+    fun onManagerNameChange(newManagerName: String) {
+        _managerName.value = newManagerName
+    }
+
+    fun onAddressChange(newAddress: String) {
+        _address.value = newAddress
     }
 
     fun signUp() {
         viewModelScope.launch {
             try {
-                val response = repository.loginApi(_email.value, _password.value)
-                if (response.result) {
+                val comSignUp = ComSignUP(
+                    companyId = email.value,
+                    companyName = companyName.value,
+                    email = email.value,
+                    password = password.value,
+                    managerName = managerName.value,
+                    address = address.value
+                )
+
+                val response = SignUpCompRepo.signUpCompany(comSignUp)
+
+                if (response != null && response.result) {
                     _signUpSuccess.value = true
                     _errorMessage.value = null
                 } else {
-                    _errorMessage.value = response.message
+                    _errorMessage.value = response?.message ?: "Sign up failed"
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Sign up failed: ${e.message}"
