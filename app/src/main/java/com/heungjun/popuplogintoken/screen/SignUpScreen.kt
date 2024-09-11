@@ -42,11 +42,16 @@ import com.heungjun.popuplogintoken.model.SignUpUser
 import com.heungjun.popuplogintoken.navigation.Screen
 import com.heungjun.popuplogintoken.viewmodel.UserSignUpViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.heungjun.popuplogintoken.viewmodel.CategoryVM
 import com.heungjun.popuplogintoken.viewmodel.CompanySignUpViewModel
 
 
 @Composable
-fun GeneralMemberSignUpScreen(navController: NavHostController, viewModel: UserSignUpViewModel = viewModel()) {
+fun GeneralMemberSignUpScreen(
+    navController: NavHostController,
+    viewModel: UserSignUpViewModel = viewModel(),
+    categoryVM: CategoryVM = viewModel() // Add CategoryVM here
+) {
     val signUpUser = remember { mutableStateOf(
         SignUpUser(
             birth = "", categories = emptyList(), detailAddress = "", email = "",
@@ -93,6 +98,7 @@ fun GeneralMemberSignUpScreen(navController: NavHostController, viewModel: UserS
                         viewModel.onSignUpUserChange(updatedUser)
                     }
                 )
+                CategorySelectionScreen(categoryVM = categoryVM) // Add CategorySelectionScreen here
                 SignUpButton(onClick = { viewModel.signUp() })
                 if (errorMessage != null) {
                     Text(text = errorMessage ?: "", color = Color.Red, fontSize = 14.sp)
@@ -109,6 +115,7 @@ fun GeneralMemberSignUpScreen(navController: NavHostController, viewModel: UserS
         }
     }
 }
+
 
 @Composable
 fun CorporateMemberSignUpScreen(navController: NavHostController, viewModel: CompanySignUpViewModel = viewModel()) {

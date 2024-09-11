@@ -65,7 +65,7 @@ class CompanySignUpViewModel : ViewModel() {
 
                 val response = SignUpCompRepo.signUpCompany(comSignUp)
 
-                if (response != null && response.result) {
+                if (response != null && response.result == true) {
                     _signUpSuccess.value = true
                     _errorMessage.value = null
                 } else {

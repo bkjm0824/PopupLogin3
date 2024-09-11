@@ -36,7 +36,7 @@ data class SignUpUser(
 @Serializable
 data class SignUpResponse(
     @SerialName("data")
-    val `data`: List<SignUpUser>,
+    val `data`: List<SignUpUser>?,
     @SerialName("message")
     val message: String,
     @SerialName("result")
