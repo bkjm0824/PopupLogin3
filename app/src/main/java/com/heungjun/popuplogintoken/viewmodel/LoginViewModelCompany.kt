@@ -36,7 +36,7 @@ class LoginViewModelCompany(
             try {
                 val response = repository.loginApi(_email.value, _password.value)
                 if (response.result) {
-                    _token.value = response.data.token
+                    _token.value = response.data?.token
                     _errorMessage.value = null
                 } else {
                     _token.value = null

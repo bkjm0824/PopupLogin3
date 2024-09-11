@@ -14,6 +14,7 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
+// Ktor HTTP 클라이언트를 구성하는 객체
 object KtorClient {
 
     // JSON 파서를 설정하는 부분, 기본값을 설정하고 알 수 없는 키를 무시하게 설정
@@ -33,7 +34,7 @@ object KtorClient {
         install(Logging) {
             logger = object : Logger {  // 로그를 기록하는 로거 정의
                 override fun log(message: String) {
-                    Log.d("CategoryApi", "API log: $message")  // 로그를 디버그 출력으로 남김
+                    Log.d("KtorClient", "API log: $message")  // 로그를 디버그 출력으로 남김
                 }
             }
             level = LogLevel.ALL  // 모든 로그 레벨을 기록 (HEADER, BODY 등)

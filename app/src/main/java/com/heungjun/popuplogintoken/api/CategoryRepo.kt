@@ -7,6 +7,7 @@ import io.ktor.client.request.get
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+// 카테고리 관련 데이터를 처리하는 저장소 객체
 object CategoryRepo {
 
     // 서버에서 카테고리 목록을 가져오는 함수
@@ -25,7 +26,7 @@ object CategoryRepo {
                     null
                 }
             } catch (e: Exception) {
-                // 예외가 발생하면 스택 트레이스를 출력하고 null을 반환 (에러 처리를 위한 예외 처리)
+                // 예외 발생 시 스택 트레이스를 출력하고 null을 반환
                 e.printStackTrace()
                 null
             }
