@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CheckCompanyIdRequest(
-    @SerialName("companyId") val companyId: String  // 요청에 포함될 사업자 번호
+    @SerialName("companyId") val companyId: String  // 서버로 전송할 사업자 번호
 )

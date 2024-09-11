@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiResponse(
     @SerialName("data")
-    val `data`: Data,
+    val `data`: Data? = null,  // data 필드를 nullable로 변경하고 기본값을 null로 설정
     @SerialName("message")
     val message: String,
     @SerialName("result")
