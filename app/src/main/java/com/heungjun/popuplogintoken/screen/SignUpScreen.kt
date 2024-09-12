@@ -124,18 +124,23 @@ fun CorporateMemberSignUpScreen(navController: NavHostController, viewModel: Com
     val password by viewModel.password.collectAsState()
     val managerName by viewModel.managerName.collectAsState()
     val address by viewModel.address.collectAsState()
+    val detailAddress by viewModel.detailAddress.collectAsState()  // 추가된 필드
+    val postCode by viewModel.postCode.collectAsState()            // 추가된 필드
 
     val signUpSuccess by viewModel.signUpSuccess.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
 
     if (signUpSuccess) {
-        // Navigate to login screen or show a success message
         navController.navigate(Screen.CorporateMemberLogin.route)
     }
+
+    // Scroll 상태를 기억하기 위한 ScrollState
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState) // 스크롤 기능 추가
             .background(Color.White)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -148,7 +153,6 @@ fun CorporateMemberSignUpScreen(navController: NavHostController, viewModel: Com
                 .background(Color.White, shape = RoundedCornerShape(16.dp))
                 .border(BorderStroke(1.dp, Color.Gray), shape = RoundedCornerShape(16.dp))
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState())
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -167,7 +171,24 @@ fun CorporateMemberSignUpScreen(navController: NavHostController, viewModel: Com
                     onManagerNameChange = viewModel::onManagerNameChange,
                     onAddressChange = viewModel::onAddressChange
                 )
+
+                // 추가된 필드 입력란
+                InputFieldWithUnderline(
+                    label = "상세 주소:",
+                    value = detailAddress,
+                    onValueChange = viewModel::onDetailAddressChange,
+                    placeholder = "상세 주소를 입력해주세요"
+                )
+
+                InputFieldWithUnderline(
+                    label = "우편번호:",
+                    value = postCode,
+                    onValueChange = viewModel::onPostCodeChange,
+                    placeholder = "우편번호를 입력해주세요"
+                )
+
                 SignUpButton(onClick = { viewModel.signUp() })
+
                 if (errorMessage != null) {
                     Text(text = errorMessage ?: "", color = Color.Red, fontSize = 14.sp)
                 }
