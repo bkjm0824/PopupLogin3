@@ -107,10 +107,8 @@ fun GeneralMemberLoginScreen(
             }
         }
 
-        // 소셜 로그인 섹션
-        MainSocialLoginSection()
-
         Spacer(modifier = Modifier.height(16.dp))
+
         SignUpButton(onClick = { navController.navigate(Screen.GeneralMemberSignUp.route) }, buttonText = "회원가입하기")
     }
 }
@@ -179,10 +177,8 @@ fun CorporateMemberLoginScreen(
             }
         }
 
-        // 소셜 로그인 섹션
-        MainSocialLoginSection()
-
         Spacer(modifier = Modifier.height(16.dp))
+
         SignUpButton(onClick = { navController.navigate(Screen.CorporateMemberSignUp.route) }, buttonText = "회원가입하기")
     }
 }
