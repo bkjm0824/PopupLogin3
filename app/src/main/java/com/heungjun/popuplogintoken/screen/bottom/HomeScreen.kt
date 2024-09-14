@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-<<<<<<< HEAD:app/src/main/java/com/heungjun/popuplogintoken/screen/HomeScreen.kt
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,8 +25,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
-=======
->>>>>>> github/main:app/src/main/java/com/heungjun/popuplogintoken/screen/bottom/HomeScreen.kt
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -62,7 +59,6 @@ fun HomeScreen(navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-<<<<<<< HEAD:app/src/main/java/com/heungjun/popuplogintoken/screen/HomeScreen.kt
         // 상단 뷰페이저와 로고를 포함한 박스
         item {
             Box(
@@ -81,13 +77,6 @@ fun HomeScreen(navController: NavController) {
         item {
             RecommendSection(homeState, navController)
         }
-=======
-        Text("Welcome to Home Screen")
-        Spacer(modifier = Modifier.height(16.dp))
-//        Button(onClick = { onLogout() }) {
-//            Text("Logout")
-//        }
->>>>>>> github/main:app/src/main/java/com/heungjun/popuplogintoken/screen/bottom/HomeScreen.kt
     }
 }
 

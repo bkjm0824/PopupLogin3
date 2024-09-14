@@ -3,13 +3,17 @@ package com.heungjun.popuplogintoken.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -28,13 +32,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.heungjun.popuplogintoken.api.NetworkRepository
 import com.heungjun.popuplogintoken.screen.DetailScreen
-import com.heungjun.popuplogintoken.screen.HomeScreen
 import com.heungjun.popuplogintoken.screen.MapScreen
 import com.heungjun.popuplogintoken.screen.PreOrderConfirmScreen
 import com.heungjun.popuplogintoken.screen.PreOrderScreen
 import com.heungjun.popuplogintoken.screen.ProfileScreen
 import com.heungjun.popuplogintoken.screen.SearchScreen
 import com.heungjun.popuplogintoken.screen.SettingsScreen
+import com.heungjun.popuplogintoken.screen.bottom.HomeScreen
 
 @Composable
 fun AppNavigation() {
