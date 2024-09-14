@@ -79,6 +79,8 @@ dependencies {
     implementation("io.ktor:ktor-client-okhttp:2.3.12")
     implementation("io.ktor:ktor-client-android:2.0.3")
     implementation("androidx.compose.foundation:foundation:1.6.8")
+    implementation("com.naver.maps:map-sdk:3.18.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
     // 추가된 Ktor 클라이언트 라이브러리
     implementation("io.ktor:ktor-client-core:2.3.12")

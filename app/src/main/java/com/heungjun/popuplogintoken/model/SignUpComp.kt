@@ -16,7 +16,11 @@ data class ComSignUP(
     @SerialName("managerName")
     val managerName: String,
     @SerialName("password")
-    val password: String
+    val password: String,
+    @SerialName("detailAddress")
+    val detailAddress: String,  // 추가된 필드
+    @SerialName("postCode")
+    val postCode: String        // 추가된 필드
 )
 
 

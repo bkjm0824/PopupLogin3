@@ -25,6 +25,13 @@ class CompanySignUpViewModel : ViewModel() {
     private val _address = MutableStateFlow("")
     val address: StateFlow<String> = _address
 
+    // 추가된 필드
+    private val _detailAddress = MutableStateFlow("")
+    val detailAddress: StateFlow<String> = _detailAddress
+
+    private val _postCode = MutableStateFlow("")
+    val postCode: StateFlow<String> = _postCode
+
     private val _signUpSuccess = MutableStateFlow(false)
     val signUpSuccess: StateFlow<Boolean> = _signUpSuccess
 
@@ -51,6 +58,15 @@ class CompanySignUpViewModel : ViewModel() {
         _address.value = newAddress
     }
 
+    // 추가된 필드 관련 함수
+    fun onDetailAddressChange(newDetailAddress: String) {
+        _detailAddress.value = newDetailAddress
+    }
+
+    fun onPostCodeChange(newPostCode: String) {
+        _postCode.value = newPostCode
+    }
+
     fun signUp() {
         viewModelScope.launch {
             try {
@@ -60,7 +76,9 @@ class CompanySignUpViewModel : ViewModel() {
                     email = email.value,
                     password = password.value,
                     managerName = managerName.value,
-                    address = address.value
+                    address = address.value,
+                    detailAddress = detailAddress.value,  // 추가된 필드 사용
+                    postCode = postCode.value             // 추가된 필드 사용
                 )
 
                 val response = SignUpCompRepo.signUpCompany(comSignUp)
