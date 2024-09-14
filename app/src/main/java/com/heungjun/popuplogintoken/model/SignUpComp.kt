@@ -28,9 +28,9 @@ data class ComSignUP(
 @Serializable
 data class SignUpCompResponse(
     @SerialName("data")
-    val `data`: List<ComSignUP>?,
+    val `data`: List<ComSignUP>,
     @SerialName("message")
-    val message: String?,
+    val message: String,
     @SerialName("result")
-    val result: Boolean?
+    val result: Boolean
 )
