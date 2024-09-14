@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
@@ -38,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.heungjun.popuplogintoken.R
-import com.heungjun.popuplogintoken.navigation.Screen
+import com.heungjun.popuplogintoken.navigation.Screens
 import com.heungjun.popuplogintoken.viewmodel.LoginViewModelCompany
 import com.heungjun.popuplogintoken.viewmodel.LoginViewModelUser
 
@@ -101,15 +102,15 @@ fun GeneralMemberLoginScreen(
         // 로그인 성공 시 홈스크린으로 이동
         if (token != null) {
             LaunchedEffect(token) {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.GeneralMemberLogin.route) { inclusive = true }
+                navController.navigate(Screens.HomeScreen.route) {
+                    popUpTo(Screens.GeneralMemberLogin.route) { inclusive = true }
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        SignUpButton(onClick = { navController.navigate(Screen.GeneralMemberSignUp.route) }, buttonText = "회원가입하기")
+        SignUpButton(onClick = { navController.navigate(Screens.GeneralMemberSignUp.route) }, buttonText = "회원가입하기")
     }
 }
 
@@ -171,15 +172,15 @@ fun CorporateMemberLoginScreen(
         // 로그인 성공 시 홈스크린으로 이동
         if (token != null) {
             LaunchedEffect(token) {
-                navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.CorporateMemberLogin.route) { inclusive = true }
+                navController.navigate(Screens.HomeScreen.route) {
+                    popUpTo(Screens.CorporateMemberLogin.route) { inclusive = true }
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        SignUpButton(onClick = { navController.navigate(Screen.CorporateMemberSignUp.route) }, buttonText = "회원가입하기")
+        SignUpButton(onClick = { navController.navigate(Screens.CorporateMemberSignUp.route) }, buttonText = "회원가입하기")
     }
 }
 

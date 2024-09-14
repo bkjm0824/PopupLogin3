@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
@@ -31,7 +32,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.heungjun.popuplogintoken.api.NetworkRepository
+import com.heungjun.popuplogintoken.screen.CorporateMemberLoginScreen
+import com.heungjun.popuplogintoken.screen.CorporateMemberSignUpScreen
 import com.heungjun.popuplogintoken.screen.DetailScreen
+import com.heungjun.popuplogintoken.screen.GeneralMemberLoginScreen
+import com.heungjun.popuplogintoken.screen.GeneralMemberSignUpScreen
 import com.heungjun.popuplogintoken.screen.MapScreen
 import com.heungjun.popuplogintoken.screen.PreOrderConfirmScreen
 import com.heungjun.popuplogintoken.screen.PreOrderScreen
@@ -80,7 +85,7 @@ fun AppNavigation() {
     ) { paddingValues: PaddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Screens.HomeScreen.route,
+            startDestination = Screens.GeneralMemberLogin.route,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = Screens.HomeScreen.route) {
@@ -130,6 +135,22 @@ fun AppNavigation() {
                     timeSlot = timeSlot
                 )
             }
+
+
+
+            //로그인, 회원가입 화면
+            composable(Screens.GeneralMemberLogin.route) {
+                GeneralMemberLoginScreen(navController)
+            }
+            composable(Screens.CorporateMemberLogin.route) {
+                CorporateMemberLoginScreen(navController)
+            }
+            composable(Screens.GeneralMemberSignUp.route) {
+                GeneralMemberSignUpScreen(navController)
+            }
+            composable(Screens.CorporateMemberSignUp.route) {
+                CorporateMemberSignUpScreen(navController)
+            }
         }
     }
 }
@@ -176,4 +197,9 @@ sealed class Screens(val route: String) {
     object SearchScreen : Screens("search")
     object MapScreen : Screens("map")
     object PreOrderScreen : Screens("preorder") // Added PreOrderScreen to the list of screens
+
+    object GeneralMemberLogin : Screens("general_member_login")
+    object CorporateMemberLogin : Screens("corporate_member_login")
+    object GeneralMemberSignUp : Screens("general_member_sign_up")
+    object CorporateMemberSignUp : Screens("corporate_member_sign_up")
 }

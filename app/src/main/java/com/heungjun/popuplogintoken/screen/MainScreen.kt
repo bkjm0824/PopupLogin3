@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,7 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.heungjun.popuplogintoken.navigation.Screen
+import com.heungjun.popuplogintoken.navigation.Screens
 import com.heungjun.popuplogintoken.viewmodel.LoginViewModelCompany
 import com.heungjun.popuplogintoken.viewmodel.LoginViewModelUser
 
@@ -30,17 +31,17 @@ import com.heungjun.popuplogintoken.viewmodel.LoginViewModelUser
 fun MainScreen() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Screen.GeneralMemberLogin.route) {
-        composable(Screen.GeneralMemberLogin.route) {
+    NavHost(navController = navController, startDestination = Screens.GeneralMemberLogin.route) {
+        composable(Screens.GeneralMemberLogin.route) {
             val userViewModel: LoginViewModelUser = viewModel()
             GeneralMemberLoginScreen(navController, userViewModel)
         }
-        composable(Screen.CorporateMemberLogin.route) {
+        composable(Screens.CorporateMemberLogin.route) {
             val companyViewModel: LoginViewModelCompany = viewModel()
             CorporateMemberLoginScreen(navController, companyViewModel)
         }
-        composable(Screen.GeneralMemberSignUp.route) { GeneralMemberSignUpScreen(navController) }
-        composable(Screen.CorporateMemberSignUp.route) { CorporateMemberSignUpScreen(navController) }
+        composable(Screens.GeneralMemberSignUp.route) { GeneralMemberSignUpScreen(navController) }
+        composable(Screens.CorporateMemberSignUp.route) { CorporateMemberSignUpScreen(navController) }
     }
 }
 
@@ -63,8 +64,8 @@ fun SelectMemberType(navController: NavHostController, selectedButton: MutableSt
             onClick = {
                 selectedButton.value = "일반전용"
                 when (navController.currentBackStackEntry?.destination?.route) {
-                    Screen.CorporateMemberLogin.route -> navController.navigate(Screen.GeneralMemberLogin.route)
-                    Screen.CorporateMemberSignUp.route -> navController.navigate(Screen.GeneralMemberSignUp.route)
+                    Screens.CorporateMemberLogin.route -> navController.navigate(Screens.GeneralMemberLogin.route)
+                    Screens.CorporateMemberSignUp.route -> navController.navigate(Screens.GeneralMemberSignUp.route)
                 }
             },
             colors = ButtonDefaults.buttonColors(
@@ -101,8 +102,8 @@ fun SelectMemberType(navController: NavHostController, selectedButton: MutableSt
             onClick = {
                 selectedButton.value = "기업전용"
                 when (navController.currentBackStackEntry?.destination?.route) {
-                    Screen.GeneralMemberLogin.route -> navController.navigate(Screen.CorporateMemberLogin.route)
-                    Screen.GeneralMemberSignUp.route -> navController.navigate(Screen.CorporateMemberSignUp.route)
+                    Screens.GeneralMemberLogin.route -> navController.navigate(Screens.CorporateMemberLogin.route)
+                    Screens.GeneralMemberSignUp.route -> navController.navigate(Screens.CorporateMemberSignUp.route)
                 }
             },
             colors = ButtonDefaults.buttonColors(

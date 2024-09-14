@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,7 +40,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.heungjun.popuplogintoken.R
 import com.heungjun.popuplogintoken.model.SignUpUser
-import com.heungjun.popuplogintoken.navigation.Screen
+import com.heungjun.popuplogintoken.navigation.Screens
 import com.heungjun.popuplogintoken.viewmodel.UserSignUpViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.heungjun.popuplogintoken.viewmodel.CategoryVM
@@ -65,7 +66,7 @@ fun GeneralMemberSignUpScreen(
 
     if (signUpSuccess) {
         // Navigate to login screen or show a success message
-        navController.navigate(Screen.CorporateMemberLogin.route)
+        navController.navigate(Screens.CorporateMemberLogin.route)
     }
 
     Column(
@@ -108,7 +109,7 @@ fun GeneralMemberSignUpScreen(
                     color = Color.Blue,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable {
-                        navController.navigate(Screen.CorporateMemberLogin.route)
+                        navController.navigate(Screens.CorporateMemberLogin.route)
                     }
                 )
             }
@@ -131,7 +132,7 @@ fun CorporateMemberSignUpScreen(navController: NavHostController, viewModel: Com
     val errorMessage by viewModel.errorMessage.collectAsState()
 
     if (signUpSuccess) {
-        navController.navigate(Screen.CorporateMemberLogin.route)
+        navController.navigate(Screens.CorporateMemberLogin.route)
     }
 
     // Scroll 상태를 기억하기 위한 ScrollState
@@ -197,7 +198,7 @@ fun CorporateMemberSignUpScreen(navController: NavHostController, viewModel: Com
                     color = Color.Blue,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable {
-                        navController.navigate(Screen.CorporateMemberLogin.route)
+                        navController.navigate(Screens.CorporateMemberLogin.route)
                     }
                 )
             }
