@@ -1,4 +1,4 @@
-package com.heungjun.popuplogintoken.screen
+package com.heungjun.popuplogintoken.screen.bottom
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

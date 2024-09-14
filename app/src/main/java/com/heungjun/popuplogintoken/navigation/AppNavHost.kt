@@ -16,7 +16,11 @@ import com.heungjun.popuplogintoken.screen.Footer
 import com.heungjun.popuplogintoken.screen.GeneralMemberLoginScreen
 import com.heungjun.popuplogintoken.screen.GeneralMemberSignUpScreen
 import com.heungjun.popuplogintoken.screen.Header
-import com.heungjun.popuplogintoken.screen.HomeScreen
+import com.heungjun.popuplogintoken.screen.bottom.FavoriteScreen
+import com.heungjun.popuplogintoken.screen.bottom.HomeScreen
+import com.heungjun.popuplogintoken.screen.bottom.PlaceScreen
+import com.heungjun.popuplogintoken.screen.bottom.SearchScreen
+import com.heungjun.popuplogintoken.screen.bottom.SettingsScreen
 
 @Composable
 fun AppNavHost(
@@ -62,6 +66,18 @@ fun AppNavHost(
                             popUpTo("home_screen") { inclusive = true }
                         }
                     })
+                }
+                composable("search") {
+                    SearchScreen()
+                }
+                composable("place") {
+                    PlaceScreen()
+                }
+                composable("favorite") {
+                    FavoriteScreen()
+                }
+                composable("settings") {
+                    SettingsScreen()
                 }
             }
         }
