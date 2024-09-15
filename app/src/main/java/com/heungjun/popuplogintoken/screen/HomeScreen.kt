@@ -1,4 +1,4 @@
-package com.heungjun.popuplogintoken.screen.bottom
+package com.heungjun.popuplogintoken.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,20 +47,27 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heungjun.popuplogintoken.R
+import com.heungjun.popuplogintoken.api.NetworkRepository
+import com.heungjun.popuplogintoken.model.PopupStore
+import com.heungjun.popuplogintoken.viewmodel.HeartViewModel
+import com.heungjun.popuplogintoken.viewmodel.HeartViewModelFactory
 import com.heungjun.popuplogintoken.viewmodel.HomeState
 import com.heungjun.popuplogintoken.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(navController: NavController) {
     val viewModel: HomeViewModel = viewModel()
+    val heartViewModel: HeartViewModel = viewModel(
+        factory = HeartViewModelFactory(NetworkRepository())
+    )
     val homeState by viewModel.homeState.collectAsState()
+    val username by viewModel.username.collectAsState()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 상단 뷰페이저와 로고를 포함한 박스
         item {
             Box(
                 modifier = Modifier
@@ -75,10 +83,11 @@ fun HomeScreen(navController: NavController) {
             ImageCardSlider(navController)
         }
         item {
-            RecommendSection(homeState, navController)
+            RecommendSection(homeState, navController, heartViewModel, username)
         }
     }
 }
+
 
 @Composable
 fun LogoSection() {
@@ -153,10 +162,14 @@ fun ImageCardSlider(navController: NavController) {
 }
 
 @Composable
-fun RecommendSection(homeState: HomeState, navController: NavController) {
-    val userName = "000님"
+fun RecommendSection(
+    homeState: HomeState,
+    navController: NavController,
+    heartViewModel: HeartViewModel,
+    username: String
+) {
+    val displayName = if (username.isNotBlank()) username else "000님"
 
-    // Define a list of images for the cards
     val imagesList = listOf(
         R.drawable.kakao,
         R.drawable.atom,
@@ -171,7 +184,7 @@ fun RecommendSection(homeState: HomeState, navController: NavController) {
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "$userName 을 위한 추천 팝업스토어",
+            text = "$displayName 을 위한 추천 팝업스토어",
             style = MaterialTheme.typography.bodyMedium.copy(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold
@@ -189,9 +202,8 @@ fun RecommendSection(homeState: HomeState, navController: NavController) {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Take the first 3 items or less
                 homeState.popupStores.take(3).forEachIndexed { index, store ->
-                    val image = imagesList.getOrElse(index) { R.drawable.poster1 } // Fallback to poster1 if index is out of bounds
+                    val image = imagesList.getOrElse(index) { R.drawable.poster1 }
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -202,7 +214,6 @@ fun RecommendSection(homeState: HomeState, navController: NavController) {
                         shape = RoundedCornerShape(12.dp),
                     ) {
                         Box(modifier = Modifier.fillMaxWidth()) {
-                            // Image and Text Row
                             Row(
                                 modifier = Modifier
                                     .padding(16.dp)
@@ -242,8 +253,9 @@ fun RecommendSection(homeState: HomeState, navController: NavController) {
                                     }
                                 }
                             }
-                            // Favorite Button
                             FavoriteButton(
+                                store = store,
+                                heartViewModel = heartViewModel,
                                 modifier = Modifier
                                     .align(Alignment.BottomEnd)
                                     .padding(8.dp)
@@ -258,15 +270,21 @@ fun RecommendSection(homeState: HomeState, navController: NavController) {
 
 @Composable
 fun FavoriteButton(
+    store: PopupStore,
+    heartViewModel: HeartViewModel,
     modifier: Modifier = Modifier,
     color: Color = Color(0xffE91E63)
 ) {
-    var isFavorite by remember { mutableStateOf(false) }
+    val heartResponse by heartViewModel.heartResponse.collectAsState()
+    val isLoading by heartViewModel.isLoading.collectAsState()
+    val isFavorite = heartResponse?.data?.popupStoreId == store.id
 
     IconToggleButton(
         checked = isFavorite,
         onCheckedChange = {
-            isFavorite = !isFavorite
+            if (!isLoading) {
+                heartViewModel.sendHeart(store.id)
+            }
         },
         modifier = modifier
     ) {
@@ -277,6 +295,9 @@ fun FavoriteButton(
         )
     }
 }
+
+
+
 
 
 @Composable

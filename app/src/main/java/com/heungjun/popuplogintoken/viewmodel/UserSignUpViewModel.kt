@@ -22,6 +22,10 @@ class UserSignUpViewModel : ViewModel() {
     private val _signUpSuccess = MutableStateFlow(false)
     val signUpSuccess: StateFlow<Boolean> = _signUpSuccess
 
+    // New StateFlow to expose the username
+    private val _username = MutableStateFlow("")
+    val username: StateFlow<String> = _username
+
     fun onSignUpUserChange(newSignUpUser: SignUpUser) {
         _signUpUser.value = newSignUpUser
     }
@@ -33,6 +37,7 @@ class UserSignUpViewModel : ViewModel() {
                 if (response?.result == true) {
                     _signUpSuccess.value = true
                     _errorMessage.value = null
+                    _username.value = _signUpUser.value.username // Store the username after successful sign-up
                 } else {
                     _errorMessage.value = response?.message ?: "Unknown error"
                 }

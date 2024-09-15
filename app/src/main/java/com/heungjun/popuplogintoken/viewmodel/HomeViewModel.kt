@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.heungjun.popuplogintoken.api.NetworkRepository
 import com.heungjun.popuplogintoken.model.PopupStore
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -14,6 +15,16 @@ class HomeViewModel(
 ) : ViewModel() {
     private val _homeState = MutableStateFlow(HomeState())
     val homeState = _homeState.asStateFlow()
+
+    // Username for the signed-up user
+    private val _username = MutableStateFlow<String>("")
+    val username: StateFlow<String> = _username.asStateFlow()
+
+
+    // Fetch the username from the repository (or use a saved user data)
+    fun setUsername(username: String) {
+        _username.value = username
+    }
 
     init {
         fetchPopupStores()
@@ -40,7 +51,9 @@ class HomeViewModel(
             }
         }
     }
+
 }
+
 
 data class HomeState(
     val popupStores: List<PopupStore> = emptyList(),

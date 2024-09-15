@@ -36,7 +36,7 @@ fun rememberMapViewWithLifecycle(context: Context): MapView {
 
     // Initialize Naver Map SDK
     NaverMapSdk.getInstance(context).client =
-        NaverMapSdk.NaverCloudPlatformClient("ruprwelvz9")
+        NaverMapSdk.NaverCloudPlatformClient("yiu50g266x")
 
     mapView.getMapAsync { naverMap ->
         setupNaverMap(naverMap)

@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavBackStackEntry
@@ -43,10 +42,11 @@ import com.heungjun.popuplogintoken.screen.PreOrderScreen
 import com.heungjun.popuplogintoken.screen.ProfileScreen
 import com.heungjun.popuplogintoken.screen.SearchScreen
 import com.heungjun.popuplogintoken.screen.SettingsScreen
-import com.heungjun.popuplogintoken.screen.bottom.HomeScreen
+import com.heungjun.popuplogintoken.screen.HomeScreen
+import com.heungjun.popuplogintoken.viewmodel.HomeViewModel
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(homeViewModel: HomeViewModel) {
     val navController: NavHostController = rememberNavController()
 
     Scaffold(
@@ -92,7 +92,7 @@ fun AppNavigation() {
                 HomeScreen(navController)
             }
             composable(route = Screens.ProfileScreen.route) {
-                ProfileScreen()
+                ProfileScreen(navController)
             }
             composable(route = Screens.SettingsScreen.route) {
                 SettingsScreen()
@@ -110,7 +110,7 @@ fun AppNavigation() {
                 DetailScreen(
                     id = id,
                     navigateBack = { navController.popBackStack() },
-                    navController = navController // NavController를 전달
+                    navController = navController
                 )
             }
             composable(route = "preorder") {
@@ -136,9 +136,10 @@ fun AppNavigation() {
                 )
             }
 
+//            composable("favorites") {
+//                FavoritesScreen(navController, homeViewModel)
+//            }
 
-
-            //로그인, 회원가입 화면
             composable(Screens.GeneralMemberLogin.route) {
                 GeneralMemberLoginScreen(navController)
             }
@@ -154,6 +155,7 @@ fun AppNavigation() {
         }
     }
 }
+
 
 
 data class NavItem(
