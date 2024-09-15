@@ -52,20 +52,51 @@ class NetworkRepository {
         }
     }
 
-    @Throws(Exception::class)
+    // 찜 추가
     suspend fun sendHeartRequest(popupStoreId: Int): HeartResponse? {
         val url = "http://10.0.2.2:8080/heart"
         return withContext(Dispatchers.IO) {
             try {
-                val response: HeartResponse = client.post(url) {
+                val response: HttpResponse = client.post(url) {
                     contentType(ContentType.Application.Json)
                     setBody(mapOf("popupStoreId" to popupStoreId))
-                }.body()
-                Log.d("NetworkRepository", "Heart Response: $response")
-                response
+                }
+                val heartResponse: HeartResponse = response.body()
+                heartResponse
             } catch (e: Exception) {
-                e.printStackTrace()
                 Log.e("NetworkRepository", "Failed to send heart request", e)
+                null
+            }
+        }
+    }
+
+    // 찜 삭제
+    suspend fun deleteHeartRequest(popupStoreId: Int): HeartResponse? {
+        val url = "http://10.0.2.2:8080/heart"
+        return withContext(Dispatchers.IO) {
+            try {
+                val response: HttpResponse = client.delete(url) {
+                    contentType(ContentType.Application.Json)
+                    setBody(mapOf("popupStoreId" to popupStoreId))
+                }
+                val heartResponse: HeartResponse = response.body()
+                heartResponse
+            } catch (e: Exception) {
+                Log.e("NetworkRepository", "Failed to delete heart request", e)
+                null
+            }
+        }
+    }
+
+    // 찜 목록 조회
+    suspend fun getHeartList(): List<HeartResponse>? {
+        val url = "http://10.0.2.2:8080/heart/list"
+        return withContext(Dispatchers.IO) {
+            try {
+                val response: HttpResponse = client.get(url)
+                response.body<List<HeartResponse>>()
+            } catch (e: Exception) {
+                Log.e("NetworkRepository", "Failed to fetch heart list", e)
                 null
             }
         }

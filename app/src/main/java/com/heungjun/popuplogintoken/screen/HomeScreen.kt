@@ -256,9 +256,9 @@ fun RecommendSection(
                             FavoriteButton(
                                 store = store,
                                 heartViewModel = heartViewModel,
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(8.dp)
+//                                Modifier = Modifier
+//                                    .align(Alignment.BottomEnd)
+//                                    .padding(8.dp)
                             )
                         }
                     }
@@ -269,12 +269,22 @@ fun RecommendSection(
 }
 
 @Composable
-fun FavoriteButton(
-    store: PopupStore,
-    heartViewModel: HeartViewModel,
-    modifier: Modifier = Modifier,
-    color: Color = Color(0xffE91E63)
-) {
+fun HeartStoreItem(store: PopupStore, heartViewModel: HeartViewModel) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = store.title ?: "Unknown", style = MaterialTheme.typography.titleLarge)
+            Text(text = store.address ?: "No Address", style = MaterialTheme.typography.bodyMedium)
+        }
+        FavoriteButton(store = store, heartViewModel = heartViewModel)
+    }
+}
+
+@Composable
+fun FavoriteButton(store: PopupStore, heartViewModel: HeartViewModel) {
     val heartResponse by heartViewModel.heartResponse.collectAsState()
     val isLoading by heartViewModel.isLoading.collectAsState()
     val isFavorite = heartResponse?.data?.popupStoreId == store.id
@@ -283,19 +293,20 @@ fun FavoriteButton(
         checked = isFavorite,
         onCheckedChange = {
             if (!isLoading) {
-                heartViewModel.sendHeart(store.id)
+                if (isFavorite) {
+                    heartViewModel.deleteHeart(store.id)
+                } else {
+                    heartViewModel.sendHeart(store.id)
+                }
             }
-        },
-        modifier = modifier
+        }
     ) {
         Icon(
-            tint = color,
-            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
             contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites"
         )
     }
 }
-
 
 
 
