@@ -4,6 +4,7 @@ import android.util.Log
 import com.heungjun.popuplogintoken.model.ApiResponse2
 import com.heungjun.popuplogintoken.model.ApiResponse3
 import com.heungjun.popuplogintoken.model.HeartResponse
+import com.heungjun.popuplogintoken.model.ReservationList
 import com.heungjun.popuplogintoken.model.UserReservation
 import io.ktor.client.call.body
 import io.ktor.client.request.*
@@ -97,6 +98,22 @@ class NetworkRepository {
                 response.body<List<HeartResponse>>()
             } catch (e: Exception) {
                 Log.e("NetworkRepository", "Failed to fetch heart list", e)
+                null
+            }
+        }
+    }
+
+    // Updated method to fetch the reservation list, wrapped in ReservationList
+    suspend fun getUserReservationList(): ReservationList? {
+        val url = "http://10.0.2.2:8080/popup/reservation/list/3"
+        return withContext(Dispatchers.IO) {
+            try {
+                val response: ReservationList = client.get(url).body()
+                Log.d("NetworkRepository", "ReservationList: $response")
+                response
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("NetworkRepository", "Failed to fetch user reservation list", e)
                 null
             }
         }

@@ -169,10 +169,10 @@ fun CorporateMemberLoginScreen(
             Text(text = loginError ?: "", color = Color.Red)
         }
 
-        // 로그인 성공 시 홈스크린으로 이동
+        // 로그인 성공 시 대시보드로 이동
         if (token != null) {
             LaunchedEffect(token) {
-                navController.navigate(Screens.HomeScreen.route) {
+                navController.navigate(Screens.DashboardScreen.route) {
                     popUpTo(Screens.CorporateMemberLogin.route) { inclusive = true }
                 }
             }

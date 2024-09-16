@@ -33,6 +33,7 @@ import androidx.navigation.navArgument
 import com.heungjun.popuplogintoken.api.NetworkRepository
 import com.heungjun.popuplogintoken.screen.CorporateMemberLoginScreen
 import com.heungjun.popuplogintoken.screen.CorporateMemberSignUpScreen
+import com.heungjun.popuplogintoken.screen.DashboardScreen
 import com.heungjun.popuplogintoken.screen.DetailScreen
 import com.heungjun.popuplogintoken.screen.GeneralMemberLoginScreen
 import com.heungjun.popuplogintoken.screen.GeneralMemberSignUpScreen
@@ -152,6 +153,10 @@ fun AppNavigation(homeViewModel: HomeViewModel) {
             composable(Screens.CorporateMemberSignUp.route) {
                 CorporateMemberSignUpScreen(navController)
             }
+            composable(Screens.DashboardScreen.route) {
+                DashboardScreen(navController)
+            }
+
         }
     }
 }
@@ -199,6 +204,7 @@ sealed class Screens(val route: String) {
     object SearchScreen : Screens("search")
     object MapScreen : Screens("map")
     object PreOrderScreen : Screens("preorder") // Added PreOrderScreen to the list of screens
+    object DashboardScreen : Screens("dashboard")
 
     object GeneralMemberLogin : Screens("general_member_login")
     object CorporateMemberLogin : Screens("corporate_member_login")
